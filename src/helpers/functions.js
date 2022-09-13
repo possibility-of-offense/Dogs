@@ -89,4 +89,21 @@ function dispatchDogReducer(state, action) {
   return state;
 }
 
+export function reducerView(state, action) {
+  if (action.type === "CHANGE_VIEW") {
+    let clonedObj = { ...state };
+    switch (action.payload) {
+      case "dogs":
+        clonedObj.view = "dogs";
+        break;
+      case "add_dog":
+        clonedObj.view = "add_dog";
+        break;
+      default:
+        break;
+    }
+    return clonedObj;
+  }
+}
+
 export default dispatchDogReducer;

@@ -25,6 +25,9 @@ code {
 .mright-3 {
   margin-right: 4px;
 }
+.mleft-3 {
+  margin-left: 14px;
+}
 
 .cursor-pointer {
   cursor: pointer;
@@ -46,4 +49,8 @@ code {
   to {
     transform: translate(-50%, 0);
   }
+}
+
+.grid {
+  display: flex;
 }
