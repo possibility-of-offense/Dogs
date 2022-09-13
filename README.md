@@ -1,3 +1,5 @@
+npx json-server --watch --port 3001 dogs.json
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,0 +1,52 @@
+{
+  "dogs": [
+    {
+      "id": 1,
+      "name": "Kucho",
+      "medicaments": [
+        {
+          "name": "Doxiclin",
+          "quantity": 16
+        },
+        {
+          "name": "Lopedium",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Mecho",
+      "medicaments": [
+        {
+          "name": "Artisan",
+          "quantity": 5
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Lisa",
+      "medicaments": [
+        {
+          "name": "Lopedium",
+          "quantity": 5
+        },
+        {
+          "name": "wantssomething",
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "123",
+      "medicaments": [
+        {
+          "name": "saddsa",
+          "quantity": 0
+        }
+      ]
+    }
+  ]
+}
