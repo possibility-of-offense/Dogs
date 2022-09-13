@@ -89,7 +89,7 @@ function DogsOutput(props) {
             )}
             <button
               onClick={() =>
-                dogsContext.toggleContainerViewAndIsExisting(false, true)
+                dogsContext.toggleContainerViewAndIsExisting(true, "add_dog")
               }
               className="btn btn-primary"
             >

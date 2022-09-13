@@ -45,6 +45,10 @@
         {
           "name": "saddsa",
           "quantity": 0
+        },
+        {
+          "name": "new medicament",
+          "quantity": 0
         }
       ]
     },
