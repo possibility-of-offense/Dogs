@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import NavigationLink from "./NavigationLink";
 import Search from "./Search";
 
-// Clearing the audio
+import "./Navigation.css";
 
+// Clearing the audio
 function checkAudio(audio, cb) {
   let toClear = false;
 
@@ -48,7 +49,14 @@ function Navigation(props) {
 
   return (
     <nav className="p-2 bg-white shadow d-flex align-items-center">
-      <h4 className="m-0">Welcome</h4>
+      <h4
+        className="m-0 cursor-pointer home-link"
+        onClick={() => {
+          props.onClickAddNewDog(false, "dogs");
+        }}
+      >
+        Welcome
+      </h4>
       <Search onSearch={props.onSearch} />
       <ul className="nav nav-pills d-flex ml-auto">
         <NavigationLink

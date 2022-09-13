@@ -146,7 +146,12 @@ function DogsOutput(props) {
           </table>
         </React.Fragment>
       ) : (
-        <h4>No medicaments yet!</h4>
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       )}
     </div>
   );
