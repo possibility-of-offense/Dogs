@@ -16,7 +16,7 @@
     },
     {
       "id": 2,
-      "name": "Mecho",
+      "name": "mecho",
       "medicaments": [
         {
           "name": "Artisan",
@@ -44,6 +44,16 @@
       "medicaments": [
         {
           "name": "saddsa",
+          "quantity": 0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "new dog",
+      "medicaments": [
+        {
+          "name": "4123",
           "quantity": 0
         }
       ]

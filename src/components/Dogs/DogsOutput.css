@@ -1,0 +1,17 @@
+h5.name-of-dog {
+  display: flex;
+  align-items: center;
+}
+
+h5.name-of-dog::after {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f304";
+  font-size: 12px;
+  color: red;
+}

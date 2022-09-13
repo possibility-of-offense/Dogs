@@ -5,6 +5,8 @@ import ReactDOM from "react-dom";
 
 import Alert from "../UI/Alert";
 
+import "./DogsOutput.css";
+
 function DogsOutput(props) {
   const dogsContext = useContext(DogsContext);
   const [nameToBeChanged, setNameToBeChanged] = useState(false);
@@ -46,7 +48,7 @@ function DogsOutput(props) {
           <div className="d-flex align-items-center justify-content-between m-3 pb-2 border-bottom">
             <h5
               onClick={handleToggleFormVisibility}
-              className="text-start cursor-pointer"
+              className="name-of-dog text-start cursor-pointer"
               style={{ userSelect: "none" }}
             >
               {dogsContext.dog.name}
@@ -144,7 +146,7 @@ function DogsOutput(props) {
           </table>
         </React.Fragment>
       ) : (
-        <h4>No</h4>
+        <h4>No medicaments yet!</h4>
       )}
     </div>
   );

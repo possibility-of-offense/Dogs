@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import NavigationLink from "./NavigationLink";
+import Search from "./Search";
+
+// Clearing the audio
 
 function checkAudio(audio, cb) {
   let toClear = false;
@@ -20,6 +24,7 @@ function Navigation(props) {
   let bark = new Audio("/bark.mp3");
   const [playAudio, setPlayAudio] = useState(!bark.paused);
 
+  // Click on the button to trigger the sound
   function handleButtonClick() {
     setPlayAudio(true);
     bark.play();
@@ -35,45 +40,40 @@ function Navigation(props) {
     };
   }, []);
 
+  // Handling click on link
+  function handleLinkClick(e, dog, view) {
+    props.onClickAddNewDog(dog, view);
+    e.preventDefault();
+  }
+
   return (
     <nav className="p-2 bg-white shadow d-flex align-items-center">
       <h4 className="m-0">Welcome</h4>
+      <Search onSearch={props.onSearch} />
       <ul className="nav nav-pills d-flex ml-auto">
-        <li className="nav-item">
-          <a
-            onClick={handleButtonClick}
-            className="nav-link active"
-            aria-current="page"
-            href="#"
-            style={{
-              pointerEvents: !playAudio ? "all" : "none",
-              opacity: !playAudio ? "1" : ".5",
-            }}
-          >
-            Dogs
-          </a>
-        </li>
+        <NavigationLink
+          styling={{
+            pointerEvents: !playAudio ? "all" : "none",
+            opacity: !playAudio ? "1" : ".5",
+          }}
+          className="nav-link active"
+          onClick={handleButtonClick}
+        >
+          <li className="nav-item">Dogs</li>
+        </NavigationLink>
         &nbsp;
-        <li className="nav-item">
-          <a
-            onClick={() => props.onClickAddNewDog(false)}
-            className="btn btn-link px-1 "
-            aria-current="page"
-            href="#"
-          >
-            Add new dog
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            onClick={() => props.onClickAddNewDog(true)}
-            className="btn btn-link px-1"
-            aria-current="page"
-            href="#"
-          >
-            See all dogs
-          </a>
-        </li>
+        <NavigationLink
+          className="btn btn-link px-1"
+          onClick={(e) => handleLinkClick(e, false, "add_dog")}
+        >
+          <li className="nav-item">Add new dog</li>
+        </NavigationLink>
+        <NavigationLink
+          className="btn btn-link px-1"
+          onClick={(e) => handleLinkClick(e, false, "dogs")}
+        >
+          <li className="nav-item">See all dogs</li>
+        </NavigationLink>
       </ul>
     </nav>
   );

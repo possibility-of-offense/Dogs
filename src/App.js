@@ -1,38 +1,27 @@
 import "./App.css";
 import React, { useEffect, useReducer, useState } from "react";
+import ReactDOM from "react-dom";
 
 // components
 import DogsAddingForm from "./components/Dogs/DogsAddingForm";
 import DogsOutput from "./components/Dogs/DogsOutput";
 import Card from "./components/UI/Card";
 import Navigation from "./components/UI/Navigation";
+import Alert from "./components/UI/Alert";
 
 // functions
 import dispatchDogReducer from "./helpers/functions";
 import { fetchRequest } from "./helpers/functions";
+import { reducerView } from "./helpers/functions";
 
 // context
 import { DogsContext } from "./context/dogs-context";
+import DogsSidebar from "./components/Dogs/DogsSidebar";
 
 export const ExistingDogContext = React.createContext({
   isDogExisting: false,
   setIsDogExisting: () => {},
 });
-
-function reducerView(state, action) {
-  if (action.type === "CHANGE_VIEW") {
-    switch (action.payload) {
-      case "dogs":
-        state.view = "dogs";
-        break;
-      case "add_dog":
-        state.view = "add_dog";
-        break;
-      default:
-        break;
-    }
-  }
-}
 
 function App() {
   // Initial State
@@ -43,16 +32,12 @@ function App() {
     isDogExisting: false,
   });
 
-  const [viewsState, dispatchViews] = useReducer(() => {}, {
+  const [viewsState, dispatchViews] = useReducer(reducerView, {
     view: "dogs",
-    changeView: (view) => {},
   });
 
   // If dog is existing
   const [isDogExisting, setIsDogExisting] = useState(false);
-
-  // State for toggling view
-  const [showDogsContainer, setShowDogsContainer] = useState(true);
 
   // Hook for fetching the dog when the selectedDog is being changed
   useEffect(() => {
@@ -67,13 +52,13 @@ function App() {
   // Setting selectedDog and fetching appropriate dog
   function handleUpdateDog() {
     dispatchDog({ type: "UPDATE_SELECTED_DOG", payload: this });
-    setShowDogsContainer(true);
+    handleTogglingView(false, "dogs");
   }
 
   // Updating the dogs
   function handleUpdateDogs(dog) {
     fetchRequest(null, dispatchDog, "UPDATE_DOGS", "POST", dog);
-    handleToggleContainerViewAndIsExisting(true, false);
+    handleTogglingView(false);
   }
 
   // Function to change medicaments quantity
@@ -85,7 +70,7 @@ function App() {
       "PUT",
       obj
     );
-    handleToggleContainerViewAndIsExisting(true, false);
+    handleTogglingView(false);
   }
 
   // Function to change quantity of medicament
@@ -140,66 +125,82 @@ function App() {
     );
   }
 
-  // HELPERS
-  // HELPERS
+  const [showModal, setShowModal] = useState(false);
+  // Search for dogs
+  function handleSearchForDogs(name) {
+    const getDog = dogsState.dogs.find((dog) =>
+      dog.name.toLowerCase().includes(name.toLowerCase())
+    );
+
+    if (getDog) {
+      dispatchViews({ type: "CHANGE_VIEW", payload: "dogs" });
+      dispatchDog({ type: "UPDATE_SELECTED_DOG", payload: getDog });
+      setShowModal(false);
+    } else {
+      setShowModal(true);
+    }
+  }
+
   // HELPERS
   // Toggling the container and chaning the isExisting property on the context
-  function handleToggleContainerViewAndIsExisting(container, dog) {
-    setShowDogsContainer(container);
+  function handleTogglingView(dog, view = "dogs") {
     setIsDogExisting((prev) => dog);
+    dispatchViews({ type: "CHANGE_VIEW", payload: view });
+  }
+
+  // Wrapper component
+  function EstablishView(props) {
+    if (props.view === "dogs") {
+      return <DogsOutput className="bg-white rounded p-2 shadow-sm" />;
+    } else if (props.view === "add_dog") {
+      return (
+        <ExistingDogContext.Provider
+          value={{
+            isDogExisting: isDogExisting,
+            setIsDogExisting: () => setIsDogExisting((prev) => !prev),
+          }}
+        >
+          <DogsAddingForm lastId={dogsState.dogs.slice().pop().id} />
+        </ExistingDogContext.Provider>
+      );
+    }
   }
 
   return (
     <div className="App">
-      <Navigation onClickAddNewDog={handleToggleContainerViewAndIsExisting} />
+      <Navigation
+        onSearch={handleSearchForDogs}
+        onClickAddNewDog={handleTogglingView}
+      />
       <br />
+
+      {showModal &&
+        ReactDOM.createPortal(
+          <Alert className="alert-info">No dog was found</Alert>,
+          document.getElementById("modal")
+        )}
 
       <DogsContext.Provider
         value={{
           dog: dogsState.dog,
+          dogs: dogsState.dogs,
           changeQuantity: handleChangeQuantity,
           deleteMedicament: handleDeleteMedicament,
           updateDogs: handleUpdateDogs,
           addQuantity: handleAddQuantity,
           changingDogName: handleChangingDogName,
-          toggleContainerViewAndIsExisting:
-            handleToggleContainerViewAndIsExisting,
+          toggleContainerViewAndIsExisting: handleTogglingView,
         }}
       >
         <div className="container text-center mt-4 px-4">
           <div className="row gx-5">
             <div className="col-3">
               <Card>
-                <div className="list-group list-group-flush">
-                  {dogsState.dogs.length > 0 &&
-                    dogsState.dogs.map((dog) => (
-                      <a
-                        className={`cursor-pointer list-group-item list-group-item-action ${
-                          dog.id === dogsState.dog.id && "active"
-                        }`}
-                        id="list-home-list"
-                        key={dog.id}
-                        onClick={handleUpdateDog.bind(dog)}
-                      >
-                        {dog.name}
-                      </a>
-                    ))}
-                </div>
+                <DogsSidebar onUpdateDog={handleUpdateDog} />
               </Card>
             </div>
             <div className="col-9">
-              {showDogsContainer ? (
-                <DogsOutput className="bg-white rounded p-2 shadow-sm" />
-              ) : (
-                <ExistingDogContext.Provider
-                  value={{
-                    isDogExisting: isDogExisting,
-                    setIsDogExisting: () => setIsDogExisting((prev) => !prev),
-                  }}
-                >
-                  <DogsAddingForm lastId={dogsState.dogs.slice().pop().id} />
-                </ExistingDogContext.Provider>
-              )}
+              <EstablishView view={viewsState?.view} />
             </div>
           </div>
         </div>
